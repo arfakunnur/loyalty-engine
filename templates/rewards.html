@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards Catalog - Cozy Beans Café Loyalty</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-link">
+                <span class="logo-icon">☕</span>
+                <span class="logo-text">Cozy Beans</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/create-event">Add Event</a></li>
+                <li><a href="/balance">Check Balance</a></li>
+                <li><a href="/rewards" class="active">Redeem Rewards</a></li>
+                <li><a href="/ledger">Audit Ledger</a></li>
+                <li><a href="/reversal">Reverse Event</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Rewards Catalog</h1>
+            <p>Redeem loyalty points for premium café vouchers. Input a User ID below to authorize redemptions from their balance.</p>
+        </div>
+
+        <!-- User Authentication Card for Redemptions -->
+        <div class="card" style="max-width: 600px; margin: 0 auto 3rem auto;">
+            <h2>🔑 Enter Customer ID</h2>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label for="user_id">User ID (Authorize Customer)</label>
+                <input type="text" id="user_id" class="form-control" placeholder="customer@email.com or user_123" required>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--color-mocha); margin-top: 0.45rem;">Authorized User ID must have sufficient points before pressing "Redeem Reward" below.</p>
+            
+            <div id="redeem-alert-container"></div>
+        </div>
+
+        <!-- Grid of Reward Cards -->
+        <h2 style="font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 1rem; color: var(--color-espresso); border-bottom: 2px solid var(--color-latte); padding-bottom: 0.5rem;">Available Vouchers</h2>
+        
+        <div class="rewards-grid" id="rewards-grid">
+            <!-- Dynamically populated from JS -->
+            <div class="empty-state">
+                <div class="empty-icon">☕</div>
+                <div>Loading catalog...</div>
+            </div>
+        </div>
+    </main>
+
+    <div class="cafe-watermark"></div>
+
+    <footer>
+        <p>&copy; 2026 Cozy Beans Café. All rights reserved. Loyalty Points Engine Assignment.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

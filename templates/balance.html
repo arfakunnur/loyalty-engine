@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Balance - Cozy Beans Café Loyalty</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-link">
+                <span class="logo-icon">☕</span>
+                <span class="logo-text">Cozy Beans</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/create-event">Add Event</a></li>
+                <li><a href="/balance" class="active">Check Balance</a></li>
+                <li><a href="/rewards">Redeem Rewards</a></li>
+                <li><a href="/ledger">Audit Ledger</a></li>
+                <li><a href="/reversal">Reverse Event</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Customer Balance Checker</h1>
+            <p>Query a user's ID to compute their current outstanding loyalty points balance accumulated from all eligible events.</p>
+        </div>
+
+        <div class="dashboard-details" style="grid-template-columns: 1.2fr 1fr;">
+            <!-- Inquiry Card -->
+            <div class="card">
+                <h2>🔍 Account Search</h2>
+                <form id="balance-form">
+                    <div class="form-group">
+                        <label for="user_id">User ID (Customer email/tag)</label>
+                        <input type="text" id="user_id" class="form-control" placeholder="customer@email.com or user_123" required>
+                    </div>
+                    <button type="submit" class="btn">Query Account Balance</button>
+                </form>
+
+                <!-- Status alert container -->
+                <div id="balance-alert-container"></div>
+            </div>
+
+            <!-- Balance Result Card -->
+            <div class="card" id="balance-result" style="display: none;">
+                <h2>💳 Account Balance</h2>
+                <div class="balance-display">
+                    <div class="balance-number" id="balance-value">0</div>
+                    <div class="balance-label">Loyalty Points</div>
+                </div>
+                <div style="text-align: center; margin-top: 1.5rem; color: var(--color-mocha); font-size: 0.95rem;">
+                    Account User: <strong id="balance-user" style="color: var(--color-espresso);"></strong>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <a href="/rewards" class="btn btn-secondary" style="flex: 1; text-decoration: none; font-size: 0.85rem; padding: 0.75rem 0.5rem;">Go to Catalog</a>
+                    <a href="/ledger" class="btn btn-secondary" style="flex: 1; text-decoration: none; font-size: 0.85rem; padding: 0.75rem 0.5rem;">Audit Ledger</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="cafe-watermark"></div>
+
+    <footer>
+        <p>&copy; 2026 Cozy Beans Café. All rights reserved. Loyalty Points Engine Assignment.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

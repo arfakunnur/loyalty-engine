@@ -1,0 +1,171 @@
+{
+  "info": {
+    "name": "Loyalty Points Engine",
+    "description": "Complete REST API collection for the Loyalty Points Engine backend. Run requests in order for a full end-to-end walkthrough.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "USER_ID",
+      "value": "user-demo-001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Ingest Event (Purchase — Weekday)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{BASE_URL}}/events", "host": ["{{BASE_URL}}"], "path": ["events"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event_id\": \"evt-purchase-001\",\n  \"user_id\": \"{{USER_ID}}\",\n  \"event_type\": \"purchase\",\n  \"amount\": 20.0,\n  \"timestamp\": \"2024-01-09T10:30:00Z\"\n}"
+        }
+      },
+      "response": [],
+      "_comment": "Weekday purchase. amount=20, base_rate=10 → 200 pts. Below the 500-pt cap."
+    },
+    {
+      "name": "2. Ingest Event (Purchase — Weekend, 2x multiplier)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{BASE_URL}}/events", "host": ["{{BASE_URL}}"], "path": ["events"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event_id\": \"evt-purchase-002\",\n  \"user_id\": \"{{USER_ID}}\",\n  \"event_type\": \"purchase\",\n  \"amount\": 10.0,\n  \"timestamp\": \"2024-01-13T14:00:00Z\"\n}"
+        }
+      },
+      "_comment": "Saturday. amount=10, base_rate=10 → 100 × 2 = 200 pts."
+    },
+    {
+      "name": "3. Ingest Event (Signup Bonus)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{BASE_URL}}/events", "host": ["{{BASE_URL}}"], "path": ["events"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event_id\": \"evt-signup-001\",\n  \"user_id\": \"{{USER_ID}}\",\n  \"event_type\": \"signup\",\n  \"amount\": 1.0,\n  \"timestamp\": \"2024-01-08T09:00:00Z\"\n}"
+        }
+      },
+      "_comment": "Signup: base_rate=50, amount=1 → 50 pts (cap=50)."
+    },
+    {
+      "name": "4. Duplicate Event (Should Return 409)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{BASE_URL}}/events", "host": ["{{BASE_URL}}"], "path": ["events"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event_id\": \"evt-purchase-001\",\n  \"user_id\": \"{{USER_ID}}\",\n  \"event_type\": \"purchase\",\n  \"amount\": 20.0,\n  \"timestamp\": \"2024-01-09T10:30:00Z\"\n}"
+        }
+      },
+      "_comment": "Same event_id as request #1. Idempotency test — expect 409 Conflict."
+    },
+    {
+      "name": "5. Get Balance",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{BASE_URL}}/balance/{{USER_ID}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["balance", "{{USER_ID}}"]
+        }
+      },
+      "_comment": "Should return 200 + 200 + 50 = 450 pts."
+    },
+    {
+      "name": "6. Get Ledger",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{BASE_URL}}/ledger/{{USER_ID}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["ledger", "{{USER_ID}}"]
+        }
+      },
+      "_comment": "Full transaction history, newest first."
+    },
+    {
+      "name": "7. List Reward Catalog",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{BASE_URL}}/rewards",
+          "host": ["{{BASE_URL}}"],
+          "path": ["rewards"]
+        }
+      }
+    },
+    {
+      "name": "8. Redeem Coffee Coupon (100 pts)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{BASE_URL}}/redeem", "host": ["{{BASE_URL}}"], "path": ["redeem"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_id\": \"{{USER_ID}}\",\n  \"reward_name\": \"Coffee Coupon\"\n}"
+        }
+      },
+      "_comment": "Balance=450, Coffee Coupon=100 pts. Remaining: 350 pts."
+    },
+    {
+      "name": "9. Redeem with Insufficient Balance (Should Return 402)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{BASE_URL}}/redeem", "host": ["{{BASE_URL}}"], "path": ["redeem"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_id\": \"user-broke-demo\",\n  \"reward_name\": \"Gift Card\"\n}"
+        }
+      },
+      "_comment": "user-broke-demo has 0 pts. Gift Card costs 500. Expect 402."
+    },
+    {
+      "name": "10. Reverse an Event",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{BASE_URL}}/reverse/evt-purchase-002",
+          "host": ["{{BASE_URL}}"],
+          "path": ["reverse", "evt-purchase-002"]
+        }
+      },
+      "_comment": "Reverses the 200-pt weekend purchase. Creates a compensating -200 pts ledger entry."
+    },
+    {
+      "name": "11. Double Reversal (Should Return 409)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{BASE_URL}}/reverse/evt-purchase-002",
+          "host": ["{{BASE_URL}}"],
+          "path": ["reverse", "evt-purchase-002"]
+        }
+      },
+      "_comment": "Same event reversed again. Expect 409 Conflict."
+    },
+    {
+      "name": "12. Get Balance After Reversal",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{BASE_URL}}/balance/{{USER_ID}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["balance", "{{USER_ID}}"]
+        }
+      },
+      "_comment": "450 - 100 (coffee) - 200 (reversal) = 150 pts."
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Ledger - Cozy Beans Café Loyalty</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-link">
+                <span class="logo-icon">☕</span>
+                <span class="logo-text">Cozy Beans</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/create-event">Add Event</a></li>
+                <li><a href="/balance">Check Balance</a></li>
+                <li><a href="/rewards">Redeem Rewards</a></li>
+                <li><a href="/ledger" class="active">Audit Ledger</a></li>
+                <li><a href="/reversal">Reverse Event</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Ledger Audit Log</h1>
+            <p>Inspect immutable ledger entries. Look up a User ID to view a history of points earned, rewards redeemed, or transactions reversed.</p>
+        </div>
+
+        <!-- Ledger Inquiry Form -->
+        <div class="card" style="max-width: 600px; margin: 0 auto 3rem auto;">
+            <h2>🔍 Query Transaction History</h2>
+            <form id="ledger-form">
+                <div class="form-group">
+                    <label for="user_id">User ID (Customer email/tag)</label>
+                    <input type="text" id="user_id" class="form-control" placeholder="customer@email.com or user_123" required>
+                </div>
+                <button type="submit" class="btn">View Ledger Audit Log</button>
+            </form>
+            <div id="ledger-alert-container"></div>
+        </div>
+
+        <!-- Ledger Result Table -->
+        <div class="card" id="ledger-result" style="display: none;">
+            <h2>📋 Ledger History</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Event ID</th>
+                            <th style="width: 15%;">Entry Type</th>
+                            <th style="width: 15%;">Points</th>
+                            <th style="width: 25%;">Description</th>
+                            <th style="width: 20%;">Date / Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ledger-table-body">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div class="cafe-watermark"></div>
+
+    <footer>
+        <p>&copy; 2026 Cozy Beans Café. All rights reserved. Loyalty Points Engine Assignment.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

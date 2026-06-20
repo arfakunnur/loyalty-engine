@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverse Event - Cozy Beans Café Loyalty</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-link">
+                <span class="logo-icon">☕</span>
+                <span class="logo-text">Cozy Beans</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/create-event">Add Event</a></li>
+                <li><a href="/balance">Check Balance</a></li>
+                <li><a href="/rewards">Redeem Rewards</a></li>
+                <li><a href="/ledger">Audit Ledger</a></li>
+                <li><a href="/reversal" class="active">Reverse Event</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Transaction Reversals</h1>
+            <p>Compensate or cancel a prior transaction event. The loyalty engine calculates previously issued points and deducts them via a ledger reversal entry.</p>
+        </div>
+
+        <div class="dashboard-details" style="grid-template-columns: 1.2fr 1.0fr;">
+            <!-- Reversal Processor Form -->
+            <div class="card">
+                <h2>↩️ Process Reversal</h2>
+                <form id="reversal-form">
+                    <div class="form-group">
+                        <label for="event_id">Original Event ID</label>
+                        <input type="text" id="event_id" class="form-control" placeholder="evt-XXXXXXXX-XXXX" required>
+                        <p style="font-size: 0.75rem; color: var(--color-mocha); margin-top: 0.35rem;">Enter the exact Event ID that was processed originally.</p>
+                    </div>
+                    <button type="submit" class="btn btn-secondary" style="border-color: var(--color-berry); color: var(--color-berry); font-weight: 700;">Process Event Reversal</button>
+                </form>
+
+                <!-- Feedback alert -->
+                <div id="reversal-alert-container"></div>
+            </div>
+
+            <!-- Guidelines Card -->
+            <div class="card">
+                <h2>⚠️ Reversal Rules</h2>
+                <div style="color: var(--color-mocha); font-size: 0.92rem; line-height: 1.6;">
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Immutable Ledger Principle:</strong> The database does not delete rows. Instead, it writes a compensating entry with negative points.
+                    </p>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Idempotent Safety:</strong> An event can only be reversed once. Re-applying a reversal on the same Event ID will be rejected by the engine.
+                    </p>
+                    <p>
+                        <strong>Insufficient Balance:</strong> If reversing an event drives a user's points balance below zero, the reversal is still processed, but their balance will show as negative.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="cafe-watermark"></div>
+
+    <footer>
+        <p>&copy; 2026 Cozy Beans Café. All rights reserved. Loyalty Points Engine Assignment.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

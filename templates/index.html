@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Beans Café - Loyalty & Rewards Club</title>
+    <!-- Modern typography -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Main Header -->
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo-link">
+                <span class="logo-icon">☕</span>
+                <span class="logo-text">Cozy Beans</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="/" class="active">Dashboard</a></li>
+                <li><a href="/create-event">Add Event</a></li>
+                <li><a href="/balance">Check Balance</a></li>
+                <li><a href="/rewards">Redeem Rewards</a></li>
+                <li><a href="/ledger">Audit Ledger</a></li>
+                <li><a href="/reversal">Reverse Event</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Loyalty Club Dashboard</h1>
+            <p>Welcome to Cozy Beans Café loyalty club administration portal. Monitor active customer points, process event streams, and distribute rewards.</p>
+        </div>
+
+        <!-- Alert Notification Box -->
+        <div id="dashboard-status"></div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+            <!-- Total Points Issued -->
+            <div class="metric-card balance">
+                <div class="metric-title">Points Active</div>
+                <div class="metric-value" id="stat-balance">0</div>
+                <div class="metric-desc">Total outstanding points issued across all club members.</div>
+            </div>
+
+            <!-- Total Events -->
+            <div class="metric-card events">
+                <div class="metric-title">Events Logged</div>
+                <div class="metric-value" id="stat-events">0</div>
+                <div class="metric-desc">Transactions, sign-ups, and review events processed.</div>
+            </div>
+
+            <!-- Total Redemptions -->
+            <div class="metric-card redemptions">
+                <div class="metric-title">Redemptions</div>
+                <div class="metric-value" id="stat-redemptions">0</div>
+                <div class="metric-desc">Vouchers claimed from the active rewards catalog.</div>
+            </div>
+        </div>
+
+        <!-- Dashboard Details Section -->
+        <div class="dashboard-details">
+            <!-- Left Panel: Cafe Intro -->
+            <div class="card">
+                <h2>☕ Our Loyalty Program</h2>
+                <p style="margin-bottom: 1rem; color: var(--color-mocha);">
+                    At Cozy Beans Café, we believe every cup of coffee tells a story. Our loyalty program is built to reward our regular members for participating in café community activities. 
+                </p>
+                <p style="margin-bottom: 1.5rem; color: var(--color-mocha);">
+                    Whether ordering a fresh morning espresso, reviewing their favorite pastries, or inviting their close friends, customers earn points that unlock free specialty items in our rewards catalog.
+                </p>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="/create-event" class="btn" style="flex: 1; text-decoration: none;">Award Points</a>
+                    <a href="/rewards" class="btn btn-secondary" style="flex: 1; text-decoration: none;">View Catalog</a>
+                </div>
+            </div>
+
+            <!-- Right Panel: Rule Reference -->
+            <div class="card">
+                <h2>📋 Quick Reference</h2>
+                <ul style="list-style: none; color: var(--color-mocha); font-size: 0.92rem;">
+                    <li style="margin-bottom: 0.6rem; display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-latte); padding-bottom: 0.4rem;">
+                        <span>Purchase:</span>
+                        <strong style="color: var(--color-espresso);">10 pts / $1.00</strong>
+                    </li>
+                    <li style="margin-bottom: 0.6rem; display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-latte); padding-bottom: 0.4rem;">
+                        <span>Sign-up Flat:</span>
+                        <strong style="color: var(--color-espresso);">50 pts</strong>
+                    </li>
+                    <li style="margin-bottom: 0.6rem; display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-latte); padding-bottom: 0.4rem;">
+                        <span>Referral Flat:</span>
+                        <strong style="color: var(--color-espresso);">75 pts</strong>
+                    </li>
+                    <li style="margin-bottom: 0.6rem; display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-latte); padding-bottom: 0.4rem;">
+                        <span>Review Flat:</span>
+                        <strong style="color: var(--color-espresso);">20 pts</strong>
+                    </li>
+                    <li style="margin-bottom: 0.6rem; display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-latte); padding-bottom: 0.4rem;">
+                        <span>Check-in Flat:</span>
+                        <strong style="color: var(--color-espresso);">5 pts</strong>
+                    </li>
+                    <li style="display: flex; justify-content: space-between; padding-top: 0.4rem;">
+                        <span style="color: var(--color-cinnamon); font-weight: 600;">Weekend Multiplier:</span>
+                        <strong style="color: var(--color-cinnamon);">2.0x Points</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Background Watermark -->
+    <div class="cafe-watermark"></div>
+
+    <!-- Main Footer -->
+    <footer>
+        <p>&copy; 2026 Cozy Beans Café. All rights reserved. Loyalty Points Engine Assignment.</p>
+    </footer>
+
+    <!-- App Script -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

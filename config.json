@@ -1,0 +1,27 @@
+{
+  "database": {
+    "uri": "mysql+pymysql://root:password@localhost/loyalty_db"
+  },
+  "rules": {
+    "base_points": {
+      "purchase": 10,
+      "signup": 50,
+      "referral": 75,
+      "review": 20,
+      "checkin": 5
+    },
+    "weekend_multiplier": 2.0,
+    "max_points_per_event": {
+      "purchase": 500,
+      "signup": 50,
+      "referral": 75,
+      "review": 20,
+      "checkin": 5
+    }
+  },
+  "reward_catalog": [
+    { "name": "Coffee Coupon", "points_required": 100 },
+    { "name": "Movie Ticket", "points_required": 300 },
+    { "name": "Gift Card", "points_required": 500 }
+  ]
+}
