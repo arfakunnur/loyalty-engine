@@ -6,11 +6,7 @@ This project was developed as part of a backend engineering assignment. The main
 
 To make the project easier to demonstrate, I also created a simple web interface using HTML, CSS, and JavaScript.
 
----
-
 ## Project Structure
-
-```text
 loyalty-engine/
 │
 ├── app.py
@@ -33,9 +29,6 @@ loyalty-engine/
     ├── js/
     │   └── app.js
     └── images/
-```
-
----
 
 ## Technologies Used
 
@@ -43,8 +36,8 @@ loyalty-engine/
 
 * Python
 * Flask
-* SQLAlchemy
-* SQLite / MySQL
+* RESTAPI
+* MySQL
 
 ### Frontend
 
@@ -67,13 +60,6 @@ Windows:
 ```bash
 python -m venv venv
 venv\Scripts\activate
-```
-
-Linux/Mac:
-
-```bash
-python -m venv venv
-source venv/bin/activate
 ```
 
 ### 2. Install Dependencies
