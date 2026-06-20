@@ -32,6 +32,8 @@ loyalty-engine/
     ├── js/
     │   └── app.js
     └── images/
+```
+```
 
 ## Technologies Used
 
