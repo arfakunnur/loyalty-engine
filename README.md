@@ -308,4 +308,5 @@ Rather than deleting data, reversal entries were added to maintain a complete au
 
 AI tools were used to help with project planning, code structure suggestions, and reviewing implementation ideas.
 
-The final project design, database structure, API implementation, business logic, and testing were understood, modified, and implemented by me based on the assignment requirements.
+## Author
+Arfajhan c Kunnur
