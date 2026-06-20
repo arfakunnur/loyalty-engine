@@ -6,11 +6,9 @@ This project was developed as part of a backend engineering assignment. The main
 
 To make the project easier to demonstrate, I also created a simple web interface using HTML, CSS, and JavaScript.
 
-## Project Structure
-
-```text
-```
+Project Structure
 loyalty-engine/
+
 │
 ├── app.py
 ├── models.py
@@ -32,8 +30,7 @@ loyalty-engine/
     ├── js/
     │   └── app.js
     └── images/
-```
-```
+
 
 ## Technologies Used
 
