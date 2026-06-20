@@ -1,115 +1,311 @@
-# Loyalty Points Engine ☕
+# Loyalty Points Engine
 
-A simple, beginner-friendly **Flask (Python) + MySQL/SQLite** transactional engine with a responsive, warm café-themed **HTML/CSS/JS frontend** for managing customer loyalty points. Served entirely through Flask.
+A simple Loyalty Points Engine built using Flask, SQLite/MySQL, HTML, CSS, and JavaScript.
 
-This project is designed as an interview assignment. It implements a clean, flat architecture containing robust database-level idempotency, a configurable rules engine, and an append-only immutable ledger.
+This project was developed as part of a backend engineering assignment. The main objective is to process customer transaction events, award loyalty points based on configurable rules, maintain a transaction ledger, allow reward redemption, and support event reversals.
+
+To make the project easier to demonstrate, I also created a simple web interface using HTML, CSS, and JavaScript.
 
 ---
 
-## 📂 Simplified Project Structure
+## Project Structure
 
 ```text
 loyalty-engine/
 │
-├── app.py                  # Main Flask application (Routing, API, Rules Engine)
-├── models.py               # Database schemas (SQLAlchemy: Event, LedgerEntry, Reward)
-├── config.json             # Rules engine parameters and Reward Catalog config
-├── requirements.txt        # Python application dependencies
-├── README.md               # Documentation and interview guide (You are here)
+├── app.py
+├── models.py
+├── config.json
+├── requirements.txt
+├── README.md
 │
-├── templates/              # HTML layout templates served by Flask
-│   ├── index.html          # Main Dashboard
-│   ├── create-event.html   # Log transaction events (credits points)
-│   ├── balance.html        # View user balance
-│   ├── rewards.html        # Reward Catalog & redemption interface
-│   ├── ledger.html         # Audit logs / Transaction history
-│   └── reversal.html       # Cancel/Reverse prior events
+├── templates/
+│   ├── index.html
+│   ├── create-event.html
+│   ├── balance.html
+│   ├── rewards.html
+│   ├── ledger.html
+│   └── reversal.html
 │
-└── static/                 # Static asset files
+└── static/
     ├── css/
-    │   └── style.css       # Cozy Beans café layout and styling
+    │   └── style.css
     ├── js/
-    │   └── app.js          # API calls to Flask endpoints (using Fetch API)
+    │   └── app.js
     └── images/
-        └── coffee_cup_watermark.png  # Hand-drawn watermark graphic
 ```
 
 ---
 
-## 🚀 Setup & Execution Instructions
+## Technologies Used
 
-Follow these simple steps to run the application locally.
+### Backend
 
-### Step 1: Install Dependencies
+* Python
+* Flask
+* SQLAlchemy
+* SQLite / MySQL
 
-1. **Open your terminal** in the `loyalty-engine` project folder.
-2. **Create and activate a virtual environment (Recommended):**
-   ```powershell
-   # Windows (PowerShell)
-   python -m venv venv
-   .\venv\Scripts\Activate.ps1
+### Frontend
 
-   # Windows (Command Prompt)
-   python -m venv venv
-   .\venv\Scripts\activate.bat
+* HTML
+* CSS
+* JavaScript
 
-   # macOS / Linux
-   python -m venv venv
-   source venv/bin/activate
-   ```
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### API Testing
 
-### Step 2: Configure the Database
-
-* By default, the application is configured to connect to a **MySQL** database (`loyalty_db`) using the credentials in `config.json`.
-* **SQLite Fallback:** If the application cannot connect to MySQL, it will automatically print a warning and fallback to a local SQLite database file named `loyalty.db` in the project folder. This ensures the app runs out of the box with zero setup!
-
-### Step 3: Run the Server
-
-1. **Launch the application:**
-   ```bash
-   python app.py
-   ```
-2. **Access the application:**
-   Open your browser and navigate to:
-   👉 **`http://localhost:5000`**
-
-*Note: The database tables and default rewards (Coffee Coupon, Movie Ticket, Gift Card) are automatically initialized and seeded on first run.*
+* Postman
 
 ---
 
-## 🧠 Key Interview Highlights (How to Explain the Code)
+## How to Run the Project
 
-If asked about the system's architecture during your interview, highlight these key design patterns:
+### 1. Create Virtual Environment
 
-1. **Immutable Append-Only Ledger**:
-   We never run SQL `UPDATE` operations on point balances. A customer's balance is computed dynamically by summing all points (`SUM(points)`) in the `ledger` table. This mimics double-entry banking systems, providing a perfect audit trail and preventing data tampering.
+Windows:
 
-2. **System-wide Idempotency Key**:
-   To prevent duplicate processing if a client retries a request, the API checks if the unique `event_id` already exists. The database enforces a `UNIQUE` constraint on the `event_id` column. Duplicate events fail fast, returning a `409 Conflict` status.
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-3. **Compensating Reversal Pattern**:
-   When reversing an event (e.g., if a transaction is refunded), we do not delete the original rows. Instead, we append a new `reversal` entry with negative points. This preserves the transaction history, making auditing straightforward.
+Linux/Mac:
 
-4. **Rules Engine Isolation**:
-   Point calculation logic (base rates, multipliers, caps) is defined in `config.json` and computed inside `app.py`. Weekend events automatically receive a `2.0x` multiplier (calculated using Python's `timestamp.weekday()`), and single-event points are capped to prevent abuse.
+```bash
+python -m venv venv
+source venv/bin/activate
+```
 
-5. **Self-Contained Serve Pattern**:
-   The frontend is served directly by the Flask server using `render_template` and `static_url_path`. This eliminates CORS issues and simplifies deployment, making the entire project easy to run with a single command.
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the Application
+
+```bash
+python app.py
+```
+
+Open your browser and visit:
+
+```text
+http://localhost:5000
+```
+
+The database and default rewards will be created automatically when the application runs for the first time.
 
 ---
 
-## 🛠️ API Reference Summary
+## Features
 
-The backend exposes the following REST API endpoints:
+### Event Ingestion
 
-* **`POST /events`**: Ingest customer transactions (purchase, signup, referral, checkin, review).
-* **`GET /balance/<user_id>`**: Returns the computed balance for a customer.
-* **`GET /ledger/<user_id>`**: Returns transaction history for a customer (credits, redemptions, reversals).
-* **`GET /rewards`**: Returns the list of redeemable rewards.
-* **`POST /redeem`**: Atomically checks balance and spends points to redeem a reward.
-* **`POST /reverse/<event_id>`**: Reverses a prior event and deducts points via compensating entry.
-* **`GET /stats`**: Returns overall system metrics (total active points, total processed events, total redemptions).
+Users can submit transaction events such as purchases, referrals, deposits, or bill payments.
+
+Each event contains:
+
+* Event ID
+* User ID
+* Event Type
+* Amount
+* Timestamp
+
+---
+
+### Rules Engine
+
+The system calculates loyalty points based on rules stored in `config.json`.
+
+Examples:
+
+* Different event types earn different points.
+* Weekend transactions can receive bonus points.
+* Maximum points per event can be limited.
+
+Because the rules are stored in a configuration file, they can be changed without modifying the application code.
+
+---
+
+### Points Ledger
+
+Instead of directly updating a user's balance, every transaction is stored in a ledger.
+
+Examples:
+
+```text
++20 Points (Purchase)
++10 Points (Referral)
+-50 Points (Reward Redemption)
+```
+
+The current balance is calculated by adding all ledger entries.
+
+This helps maintain a complete history of all transactions.
+
+---
+
+### Reward Redemption
+
+Users can redeem rewards using their available points.
+
+Sample rewards:
+
+* Coffee Coupon
+* Movie Ticket
+* Gift Card
+
+The system checks whether the user has enough points before allowing redemption.
+
+---
+
+### Event Reversal
+
+If a transaction needs to be cancelled, the system creates a reversal entry instead of deleting the original transaction.
+
+Example:
+
+```text
+Original Event: +20 Points
+
+Reversal Entry: -20 Points
+```
+
+This keeps the full transaction history available for auditing.
+
+---
+
+## API Endpoints
+
+### Create Event
+
+```http
+POST /events
+```
+
+Processes a new transaction and awards points.
+
+---
+
+### Check Balance
+
+```http
+GET /balance/<user_id>
+```
+
+Returns the current points balance of a user.
+
+---
+
+### View Ledger
+
+```http
+GET /ledger/<user_id>
+```
+
+Returns the transaction history for a user.
+
+---
+
+### View Rewards
+
+```http
+GET /rewards
+```
+
+Returns all available rewards.
+
+---
+
+### Redeem Reward
+
+```http
+POST /redeem
+```
+
+Allows a user to redeem a reward using points.
+
+---
+
+### Reverse Event
+
+```http
+POST /reverse/<event_id>
+```
+
+Reverses a previously processed event.
+
+---
+
+## Design Decisions
+
+### Why Use a Ledger?
+
+Instead of storing only the latest balance, every points transaction is stored as a separate record.
+
+Benefits:
+
+* Easy to track transaction history
+* Easy to audit
+* No loss of information
+
+---
+
+### Why Use Event ID?
+
+Each event has a unique Event ID.
+
+This prevents the same transaction from being processed twice if the API receives duplicate requests.
+
+---
+
+### Why Store Rules in config.json?
+
+Business rules can change over time.
+
+By storing them in a configuration file, changes can be made without modifying the application code.
+
+---
+
+### Why Use Reversal Instead of Delete?
+
+Deleting records removes history.
+
+Creating a reversal entry keeps the original transaction visible while correcting the balance.
+
+---
+
+## Challenges Faced
+
+### Preventing Duplicate Events
+
+The main challenge was ensuring that the same event could not be processed twice.
+
+This was solved by using a unique Event ID and checking it before processing.
+
+### Maintaining Transaction History
+
+Instead of updating balances directly, I used a ledger system where every transaction is stored separately.
+
+### Implementing Reversals
+
+Rather than deleting data, reversal entries were added to maintain a complete audit trail.
+
+---
+
+## Future Improvements
+
+* User Authentication
+* Admin Dashboard
+* Role-Based Access Control
+* PostgreSQL Support
+* Reporting and Analytics
+
+---
+
+## AI Usage Disclosure
+
+AI tools were used to help with project planning, code structure suggestions, and reviewing implementation ideas.
+
+The final project design, database structure, API implementation, business logic, and testing were understood, modified, and implemented by me based on the assignment requirements.
