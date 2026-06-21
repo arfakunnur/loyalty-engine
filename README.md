@@ -295,7 +295,15 @@ Rather than deleting data, reversal entries were added to maintain a complete au
 
 ## AI Usage Disclosure
 
-AI tools were used to help with project planning, code structure suggestions, and reviewing implementation ideas.
+AI tools like Chatgpt and claude were used to help with project planning, code structure suggestions, and reviewing implementation ideas.
+
+
+# Project (loyalty-engine)
+## AI Usage & Design Decisions
+
+For this project, I designed the overall workflow, database structure, API endpoints, and business logic based on my understanding of the assignment requirements. I decided how events would be processed, how points would be awarded, how redemptions and reversals would work, and how the user balance would be calculated. I used AI tools mainly as a learning and productivity aid to get suggestions for project structure, code organization, and implementation approaches.
+
+For the rules engine, I chose to keep the rules in a `config.json` file instead of hardcoding them in the application. This makes it easier to modify point values, multipliers, and limits without changing the source code. For the ledger, I used an append-only approach where every credit, redemption, and reversal is stored as a separate record. The trade-off is that balance calculations require summing ledger entries, but it provides a complete transaction history and makes auditing easier.
 
 ## Author
 Arfajhan c Kunnur
